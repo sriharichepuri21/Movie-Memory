@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+/* Layout: an inset, rounded hero card, then centred sections at max-w-6xl; the dashboard splits into two columns at lg. */
+@theme inline {
+  --color-screen: #000000;   /* page background */
+  --color-stage: #101010;    /* raised panels */
+  --color-card: #212121;     /* feature cards */
+  --color-rail: #2a2a2a;     /* borders, skeletons */
+  --color-ink: #e1e0cc;      /* body text, warm cream */
+  --color-primary: #dedbc8;  /* accents, primary buttons */
+  --color-dim: #9ca3af;      /* secondary text */
+  --color-danger: #ffb4ad;
+  --color-danger-bg: #2d1a18;
+  --font-sans: var(--font-almarai), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: var(--font-instrument), "Instrument Serif", Georgia, serif;
+}
+
+html { color-scheme: dark; }
+h1, h2, h3 { text-wrap: balance; }
+:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
+
+.skip-link { position: absolute; top: -4rem; left: 1rem; z-index: 50; padding: 0.5rem 0.75rem; border-radius: 0.375rem; background: var(--color-primary); color: black; }
+.skip-link:focus { top: 1rem; }
+
+@layer components {
+  .btn { @apply inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-base font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply bg-primary text-black hover:bg-ink; }
+  .btn-secondary { @apply border border-rail bg-stage text-ink hover:border-dim; }
+  .card { @apply rounded-2xl bg-card p-6; }
+  .label { @apply text-xs font-medium uppercase tracking-wider text-dim; }
+  .alert { @apply rounded-xl bg-danger-bg px-4 py-3 text-sm text-danger; }
+  /* Heading treatment: heavy Almarai, tight tracking. */
+  .display { @apply font-bold leading-[0.95] tracking-[-0.03em]; }
+
+  /* A poster tile for the user's movie: hue comes from the title, the left edge is a film strip. */
+  .poster { container-type: inline-size; position: relative; display: flex; align-items: flex-end; aspect-ratio: 2 / 3; overflow: hidden; border-radius: 1rem; padding: 0.875rem 0.75rem 0.875rem 1.5rem; color: var(--color-ink);
+    background: radial-gradient(120% 90% at 30% 15%, oklch(58% 0.13 var(--hue)) 0%, oklch(26% 0.06 var(--hue)) 55%, oklch(12% 0.02 var(--hue)) 100%); }
+  .poster::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 0.875rem; background: repeating-linear-gradient(to bottom, transparent 0 0.5rem, color-mix(in oklab, var(--color-ink) 28%, transparent) 0.5rem 1.125rem, transparent 1.125rem 1.5rem), color-mix(in oklab, black 45%, transparent); }
+  .poster span { font-weight: 800; font-size: clamp(0.875rem, 11cqi, 2.5rem); line-height: 0.95; letter-spacing: -0.02em; text-transform: uppercase; text-wrap: balance; overflow-wrap: anywhere; }
+}
+
+/* Hero backdrop: warm light falling on a dark screen, no external media. */
+.hero-backdrop { background: radial-gradient(60% 55% at 18% 18%, color-mix(in oklab, var(--color-primary) 22%, transparent), transparent 70%), radial-gradient(55% 65% at 85% 95%, oklch(32% 0.07 55), transparent 70%), #0a0a0a; }
+
+/* Film-grain textures as inline SVG, so nothing is fetched. */
+.noise-overlay { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.bg-noise { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

@@ -1,0 +1,13 @@
+node_modules/
+.next/
+.env*
+!.env.example
+!.env.test.example
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+.local-postgres/
+dist/
+*.log
+.DS_Store
