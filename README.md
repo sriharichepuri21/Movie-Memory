@@ -51,6 +51,7 @@ OpenAI is called only from the server. Only the movie title is sent, with no pro
 
 ## Architecture overview
 
+![Movie Memory architecture: the browser reaches Next.js pages, which fetch the API routes; the fact service locks the user row in PostgreSQL and calls OpenAI only on a cache miss; Auth.js handles Google sign-in and stores sessions in PostgreSQL.](docs/architecture/architecture.png)
 ### Request and identity flow
 
 The App Router server pages at `/`, `/onboarding`, and `/dashboard` read a database-backed Auth.js session. A signed-out visit to a protected page redirects to `/`. A signed-in account without a movie goes to onboarding; once the movie exists, both `/` and `/onboarding` lead to the dashboard. Auth.js's Prisma adapter persists the Google user, account, and opaque session. Logout deletes the session server-side. Missing names use “Movie lover”/“there”; missing or broken photos use initials, and missing email is displayed safely.
